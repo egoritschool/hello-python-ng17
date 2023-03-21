@@ -1,0 +1,33 @@
+env:
+  CHECKER_SOURCE_DIR: upstream
+  GIT_UPSTREAM_REPO: egoritschool/checker_test
+name: GitHub Actions Demo
+on: [push, fork, pull_request]
+jobs:
+  check-pytest:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v3
+
+      - name: Install python
+        uses: actions/setup-python@v3
+        with:
+          python-version: '3.9'
+
+      - run: pip install -r requirements.txt
+
+      - name: Run unit tests
+        run: |
+          PYTHONPATH=. pytest check-tests --junit-xml=junit.xml
+
+      - name: Post report to LMS
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_KEY }}
+          AWS_DEFAULT_REGION: eu-central-1
+        if: always()
+        run: |
+          echo $GIT_UPSTREAM_REPO $GITHUB_REPOSITORY
+          env
+          python junit_actions.py -f junit.xml -r ${GITHUB_REPOSITORY}

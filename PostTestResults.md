@@ -1,0 +1,13 @@
+# Post test result
+- [x] generate sample report (junit.xml)
+- [x] can we POST to Lambda? yes - by Gateway API (1.2 USD/month)
+- [x] can we STORE xml to DynamoDB? - yes, but SimpleDB might be better - No! It's deprecated
+- [x] how repository url is provided in github actions - by GITHUB_REPOSITORY env
+- [x] parse junit file
+- [x] save test result to DynamoDB using repository url as item key
+- [x] query reports by repo name
+- [x] parse and display stats
+  - user
+  - success cases
+- [ ] publish as service (Lambda? yes, lambda)
+- [ ] include to github actions workflow
